@@ -10,4 +10,5 @@ terraform: terraform_${TF_VERSION}_linux_amd64.zip
 	
 check-tf-version: terraform
 	./terraform version
+	/usr/bin/env
 	echo ${oci_api_key.pem}
