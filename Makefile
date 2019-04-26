@@ -29,9 +29,10 @@ $(TF_VARS): azure-test.pub
 	cd oci-cluster-terraform \
 	  && terraform init \
 	  && terraform validate \
-	  && terraform plan
-	# terafrom plan
-	# terraform apply -auto-approve
+	  && terraform plan \
+	  && terraform apply -auto-approve \
+	  && sleep 120 \
+	  && terraform destroy -auto-approve
 	# # we need to ignore errors between here and the destroy
 	# -MGMT_IP=$(terraform show | grep '^ManagementPublicIP' | awk '{print $3}')
 	# -ssh -i ../azure-test opc@$(MGMT_IP) "while [ ! -f /mnt/shared/finalised/mgmt ] ; do sleep 2; done" ## wait for ansible
