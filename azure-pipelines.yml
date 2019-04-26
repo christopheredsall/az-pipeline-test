@@ -14,7 +14,7 @@ steps:
   displayName: 'Run a one-line script'
 
 - script: |
-    echo ${MY_MAPPED_ENV_VAR}
+    echo "${MY_MAPPED_ENV_VAR}"
     make
   displayName: 'Run Makefile'
   env:
