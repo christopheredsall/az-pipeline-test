@@ -27,7 +27,7 @@ $(TF_VARS): azure-test.pub
 	sed -i -e "/compartment_ocid/ s/ocid1.compartment.oc1.../$(COMPARTMENT_OCID)/" $(TF_VARS)
 	sed -i -e "/ssh_public_key/ r azure-test.pub" $(TF_VARS)
 	cat  $(TF_VARS)
-	# terraform init
+	terraform init
 	# terraform validate
 	# terafrom plan
 	# terraform apply -auto-approve
