@@ -21,5 +21,22 @@ $(TF_VARS): azure-test.pub
 	cd oci-cluster-terraform
 	cp $(TF_VARS).example $(TF_VARS)
 	sed -i -e '/private_key_path/ s/\/home\/user\/.oci/../' $(TF_VARS)
+	sed -i -e "/tenancy_ocid/ s/ocid1.tenancy.oc1.../$(tenancy_ocid)" $(TF_VARS)
+	sed -i -e "/user_ocid/ s/ocid1.user.oc1.../$(user_ocid)" $(TF_VARS)
+	sed -i -e "/fingerprint/ s/11:22:33:44:55:66:77:88:99:00:aa:bb:cc:dd:ee:ff/$(fingerprint)" $(TF_VARS)
+	sed -i -e "/compartment_ocid/ s/ocid1.compartment.oc1.../$(compartment_ocid)" $(TF_VARS)
 	cat  $(TF_VARS)
-
+	# terraform init
+	# terraform validate
+	# terafrom plan
+	# terraform apply -auto-approve
+	# # we need to ignore errors between here and the destroy
+	# -MGMT_IP=$(terraform show | grep '^ManagementPublicIP' | awk '{print $3}')
+	# -ssh -i ../azure-test opc@$(MGMT_IP) "while [ ! -f /mnt/shared/finalised/mgmt ] ; do sleep 2; done" ## wait for ansible
+	# -ssh -i ../azure-test opc@$(MGMT_IP) "echo -ne 'VM.Standard2.1:\n  1: 1\n  2: 1\n  3: 1\n' > limits.yml && ./finish"
+	# -ssh -i ../azure-test opc@$(MGMT_IP) "sudo mkdir -p /mnt/shared/test && sudo chown opc /mnt/shared/test"
+	# -ssh -i ../azure-test opc@$(MGMT_IP) "echo -ne '#!/bin/bash\n\nsrun hostname\n' > test.slm"
+	# -ssh -i ../azure-test opc@$(MGMT_IP) "echo vm-standard2-1-ad1-0001 > expected" 
+        # -ssh -i ../azure-test opc@$(MGMT_IP) "sbatch --wait test.slm"
+	# -ssh -i ../azure-test opc@$(MGMT_IP) "diff /mnt/shared/test/slurm-2.out expected" 
+	# terraform destroy -auto-approve
