@@ -1,4 +1,6 @@
 TF_VERSION := 0.11.13
+TF_DIR := oci-cluster-terraform
+TF_EXAMPLE := $(TF_DIR)/terraform.tfvars.example
 
 all: check-tf-version oci-cluster-terraform/terraform.tfvars.example
 
@@ -10,8 +12,6 @@ terraform: terraform_${TF_VERSION}_linux_amd64.zip
 	
 check-tf-version: terraform
 	./terraform version
-	/usr/bin/env
-	echo ${oci_api_key.pem}
 
-oci-cluster-terraform/terraform.tfvars.example:
+$(TF_EXAMPLE):
 	git clone https://github.com/ACRC/oci-cluster-terraform.git
