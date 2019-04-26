@@ -10,3 +10,4 @@ terraform: terraform_${TF_VERSION}_linux_amd64.zip
 	
 check-tf-version: terraform
 	./terraform version
+	echo ${MY_MAPPED_ENV_VAR}
