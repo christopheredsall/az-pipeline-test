@@ -18,7 +18,6 @@ azure-test.pub:
 
 $(TF_VARS): azure-test.pub
 	git clone https://github.com/ACRC/oci-cluster-terraform.git
-	cd oci-cluster-terraform
 	cp $(TF_VARS).example $(TF_VARS)
 	sed -i -e '/private_key_path/ s/\/home\/user\/.oci/../' $(TF_VARS)
 	sed -i -e "/tenancy_ocid/ s/ocid1.tenancy.oc1.../$(TENANCY_OCID)/" $(TF_VARS)
@@ -27,7 +26,9 @@ $(TF_VARS): azure-test.pub
 	sed -i -e "/compartment_ocid/ s/ocid1.compartment.oc1.../$(COMPARTMENT_OCID)/" $(TF_VARS)
 	sed -i -e "/ssh_public_key/ r azure-test.pub" $(TF_VARS)
 	cat  $(TF_VARS)
-	pwd
+	cd oci-cluster-terraform \
+	  && terraform init \
+	  && terraform validate
 	# terraform init
 	# terraform validate
 	# terafrom plan
