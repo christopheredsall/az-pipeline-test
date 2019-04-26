@@ -13,5 +13,5 @@ check-tf-version: terraform
 	/usr/bin/env
 	echo ${oci_api_key.pem}
 
-oci-cluster-terraform/terraform.tfvars.example
+oci-cluster-terraform/terraform.tfvars.example:
 	git clone https://github.com/ACRC/oci-cluster-terraform.git
