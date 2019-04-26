@@ -1,5 +1,7 @@
 TF_VERSION := 0.11.13
 
+all: check-tf-version
+
 terraform_${TF_VERSION}_linux_amd64.zip:
 	which wget
 	which curl
