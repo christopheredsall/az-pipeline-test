@@ -9,7 +9,7 @@ terraform_${TF_VERSION}_linux_amd64.zip:
 terraform: terraform_${TF_VERSION}_linux_amd64.zip
 	unzip terraform_${TF_VERSION}_linux_amd64.zip
 	
-check-tf-version: terraformoci-cluster-terraform
+check-tf-version: terraform
 	./terraform version
 
 $(TF_VARS):
