@@ -27,7 +27,6 @@ $(TF_VARS): azure-test.pub
 	sed -i -e "/ssh_public_key/ r azure-test.pub" $(TF_VARS)
 	cat  $(TF_VARS)
 	cd oci-cluster-terraform \
-	  && cat ../oci_api_key.pem \
 	  && terraform init \
 	  && terraform validate \
 	  && terraform plan
