@@ -29,7 +29,7 @@ $(TF_VARS): azure-test.pub
 	cd oci-cluster-terraform \
 	  && terraform init \
 	  && terraform validate \
-	  && terrafrom plan
+	  && terraform plan
 	# terafrom plan
 	# terraform apply -auto-approve
 	# # we need to ignore errors between here and the destroy
