@@ -2,6 +2,9 @@
 
 [![Build Status](https://dev.azure.com/ce16990/cecinestpasunepipe/_apis/build/status/christopheredsall.az-pipeline-test?branchName=master)](https://dev.azure.com/ce16990/cecinestpasunepipe/_build/latest?definitionId=1&branchName=master)
 
+![Ceci n'est pas un pipe](https://upload.wikimedia.org/wikipedia/en/b/b9/MagrittePipe.jpg)
+![CitC Logo](https://cluster-in-the-cloud.readthedocs.io/en/latest/_static/logo.png)
+
 Testing Building a [Cluster in the Cloud](https://cluster-in-the-cloud.readthedocs.io/en/latest/index.html) using Azure Pipelines
 
 You will need to configure in the Azure interface some variables:
