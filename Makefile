@@ -21,10 +21,10 @@ $(TF_VARS): azure-test.pub
 	cd oci-cluster-terraform
 	cp $(TF_VARS).example $(TF_VARS)
 	sed -i -e '/private_key_path/ s/\/home\/user\/.oci/../' $(TF_VARS)
-	sed -i -e "/tenancy_ocid/ s/ocid1.tenancy.oc1.../$(tenancy_ocid)/" $(TF_VARS)
-	sed -i -e "/user_ocid/ s/ocid1.user.oc1.../$(user_ocid)/" $(TF_VARS)
-	sed -i -e "/fingerprint/ s/11:22:33:44:55:66:77:88:99:00:aa:bb:cc:dd:ee:ff/$(fingerprint)/" $(TF_VARS)
-	sed -i -e "/compartment_ocid/ s/ocid1.compartment.oc1.../$(compartment_ocid)/" $(TF_VARS)
+	sed -i -e "/tenancy_ocid/ s/ocid1.tenancy.oc1.../$(TENANCY_OCID)/" $(TF_VARS)
+	sed -i -e "/user_ocid/ s/ocid1.user.oc1.../$(USER_OCID)/" $(TF_VARS)
+	sed -i -e "/fingerprint/ s/11:22:33:44:55:66:77:88:99:00:aa:bb:cc:dd:ee:ff/$(FINGERPRINT)/" $(TF_VARS)
+	sed -i -e "/compartment_ocid/ s/ocid1.compartment.oc1.../$(COMPARTMENT_OCID)/" $(TF_VARS)
 	cat  $(TF_VARS)
 	# terraform init
 	# terraform validate
