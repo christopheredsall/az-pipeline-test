@@ -25,14 +25,15 @@ $(TF_VARS): azure-test.pub
 	sed -i -e "/fingerprint/ s/11:22:33:44:55:66:77:88:99:00:aa:bb:cc:dd:ee:ff/$(FINGERPRINT)/" $(TF_VARS)
 	sed -i -e "/compartment_ocid/ s/ocid1.compartment.oc1.../$(COMPARTMENT_OCID)/" $(TF_VARS)
 	sed -i -e "/ssh_public_key/ r azure-test.pub" $(TF_VARS)
+	sed -i -e "/FilesystemAD/ s/1/2/" $(TF_VARS)
 	cat  $(TF_VARS)
 	cd oci-cluster-terraform \
 	  && terraform init \
 	  && terraform validate \
 	  && terraform plan \
 	  && terraform apply -auto-approve \
-	  && sleep 120 \
-	  && terraform destroy -auto-approve
+	  ; sleep 120 \
+	  ; terraform destroy -auto-approve
 	# # we need to ignore errors between here and the destroy
 	# -MGMT_IP=$(terraform show | grep '^ManagementPublicIP' | awk '{print $3}')
 	# -ssh -i ../azure-test opc@$(MGMT_IP) "while [ ! -f /mnt/shared/finalised/mgmt ] ; do sleep 2; done" ## wait for ansible
