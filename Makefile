@@ -25,7 +25,7 @@ $(TF_VARS): azure-test.pub
 	sed -i -e "/user_ocid/ s/ocid1.user.oc1.../$(USER_OCID)/" $(TF_VARS)
 	sed -i -e "/fingerprint/ s/11:22:33:44:55:66:77:88:99:00:aa:bb:cc:dd:ee:ff/$(FINGERPRINT)/" $(TF_VARS)
 	sed -i -e "/compartment_ocid/ s/ocid1.compartment.oc1.../$(COMPARTMENT_OCID)/" $(TF_VARS)
-	sed -i -e "/ssh_public_key/ r ../azure-test.pub" $(TF_VARS)
+	sed -i -e "/ssh_public_key/ r azure-test.pub" $(TF_VARS)
 	cat  $(TF_VARS)
 	# terraform init
 	# terraform validate
