@@ -16,3 +16,5 @@ steps:
 - script: |
     make
   displayName: 'Run Makefile'
+  env:
+    MY_MAPPED_ENV_VAR: $(oci_api_key.pem)
