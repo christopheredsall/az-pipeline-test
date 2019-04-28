@@ -41,4 +41,5 @@ $(TF_VARS): azure-test.pub
 	-ssh -i azure-test opc@$(MGMT_IP) "echo vm-standard2-1-ad1-0001 > expected" 
 	-ssh -i azure-test opc@$(MGMT_IP) "sbatch --wait test.slm"
 	-ssh -i azure-test opc@$(MGMT_IP) "diff /mnt/shared/test/slurm-2.out expected" 
-	terraform destroy -auto-approve
+	cd oci-cluster-terraform \
+	  && terraform destroy -auto-approve
