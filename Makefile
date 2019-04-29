@@ -34,7 +34,7 @@ $(TF_VARS): azure-test.pub
 	  && terraform apply -auto-approve
 	# we need to ignore errors between here and the destroy, so make commands start with a minus
 	-cd oci-cluster-terraform ; terraform show -no-color | grep '^ManagementPublicIP' | awk '{print $$3}'
-	$(eval MGMT_IP=$(shell cd oci-cluster-terraform ; terraform show -no-color | grep '^ManagementPublicIP' | awk '{print $$$$3}'))
+	$(eval MGMT_IP=$(shell cd oci-cluster-terraform ; terraform show -no-color | grep '^ManagementPublicIP' | awk '{print $$3}'))
 	echo $(MGMT_IP)
 	-ssh -i azure-test opc@$(MGMT_IP) "while [ ! -f /mnt/shared/finalised/mgmt ] ; do sleep 2; done" ## wait for ansible
 	-ssh -i azure-test opc@$(MGMT_IP) "echo -ne 'VM.Standard2.1:\n  1: 1\n  2: 1\n  3: 1\n' > limits.yml && ./finish"
