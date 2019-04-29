@@ -33,15 +33,16 @@ $(TF_VARS): azure-test.pub
 	  && terraform plan \
 	  && terraform apply -auto-approve
 	# we need to ignore errors between here and the destroy, so make commands start with a minus
-	-cd oci-cluster-terraform ; terraform show -no-color | grep '^ManagementPublicIP' | awk '{print $$3}'
-	$(eval MGMT_IP=$(shell cd oci-cluster-terraform ; terraform show -no-color | grep '^ManagementPublicIP' | awk '{print $$3}'))
-	echo $(MGMT_IP)
-	-ssh -i azure-test opc@$(MGMT_IP) "while [ ! -f /mnt/shared/finalised/mgmt ] ; do sleep 2; done" ## wait for ansible
-	-ssh -i azure-test opc@$(MGMT_IP) "echo -ne 'VM.Standard2.1:\n  1: 1\n  2: 1\n  3: 1\n' > limits.yml && ./finish"
-	-ssh -i azure-test opc@$(MGMT_IP) "sudo mkdir -p /mnt/shared/test && sudo chown opc /mnt/shared/test"
-	-ssh -i azure-test opc@$(MGMT_IP) "echo -ne '#!/bin/bash\n\nsrun hostname\n' > test.slm"
-	-ssh -i azure-test opc@$(MGMT_IP) "echo vm-standard2-1-ad1-0001 > expected" 
-	-ssh -i azure-test opc@$(MGMT_IP) "sbatch --wait test.slm"
-	-ssh -i azure-test opc@$(MGMT_IP) "diff /mnt/shared/test/slurm-2.out expected" 
+	-MGMT_IP=$(cd oci-cluster-terraform ;\
+	  terraform show -no-color |\
+	  grep '^ManagementPublicIP' |\
+	  awk '{print $$3}') ;  echo -ne "Host mgmt\n\tHostname ${MGMT_IP}" > ssh-config
+	-ssh -F ssh-config opc@mgmt  "while [ ! -f /mnt/shared/finalised/mgmt ] ; do sleep 2; done" ## wait for ansible
+	-ssh -F ssh-config opc@mgmt  "echo -ne 'VM.Standard2.1:\n  1: 1\n  2: 1\n  3: 1\n' > limits.yml && ./finish"
+	-ssh -F ssh-config opc@mgmt  "sudo mkdir -p /mnt/shared/test && sudo chown opc /mnt/shared/test"
+	-ssh -F ssh-config opc@mgmt  "echo -ne '#!/bin/bash\n\nsrun hostname\n' > test.slm"
+	-ssh -F ssh-config opc@mgmt "echo vm-standard2-1-ad1-0001 > expected" 
+	-ssh -F ssh-config opc@mgmt  "sbatch --wait test.slm"
+	-ssh -F ssh-config opc@mgmt "diff /mnt/shared/test/slurm-2.out expected" 
 	cd oci-cluster-terraform \
 	  && terraform destroy -auto-approve
