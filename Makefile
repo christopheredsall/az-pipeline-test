@@ -40,11 +40,11 @@ $(TF_VARS): azure-test.pub
 	  echo -ne "Host mgmt\n\tIdentityFile azure-test\n\tHostname ${MGMT_IP}\n" > ssh-config
 	-cat ssh-config
 	-ssh -F ssh-config opc@mgmt  "while [ ! -f /mnt/shared/finalised/mgmt ] ; do sleep 2; done" ## wait for ansible
-	-ssh -F ssh-config opc@mgmt  "echo -ne 'VM.Standard2.1:\n  1: 1\n  2: 1\n  3: 1\n' > limits.yml && ./finish"
+	-ssh -F ssh-config opc@mgmt  "echo -ne 'VM.Standard2.1:\n  1: 1\n  2: 1\n  3: 1\n' > limits.yaml && ./finish"
 	-ssh -F ssh-config opc@mgmt  "sudo mkdir -p /mnt/shared/test && sudo chown opc /mnt/shared/test"
-	-ssh -F ssh-config opc@mgmt  "echo -ne '#!/bin/bash\n\nsrun hostname\n' > test.slm"
+	-ssh -F ssh-config opc@mgmt  'echo -ne "#!/bin/bash\n\nsrun hostname\n" > test.slm'
 	-ssh -F ssh-config opc@mgmt "echo vm-standard2-1-ad1-0001 > expected" 
-	-ssh -F ssh-config opc@mgmt  "sbatch --wait test.slm"
+	-ssh -F ssh-config opc@mgmt  "sbatch --chdir=/mnt/shared/test --wait test.slm"
 	-ssh -F ssh-config opc@mgmt "diff /mnt/shared/test/slurm-2.out expected" 
 	cd oci-cluster-terraform \
 	  && terraform destroy -auto-approve
