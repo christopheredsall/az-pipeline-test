@@ -36,7 +36,7 @@ $(TF_VARS): azure-test.pub
 	$(eval MGMT_IP=$(shell cd oci-cluster-terraform ;\
 	  terraform show -no-color |\
 	  grep '^ManagementPublicIP' |\
-	  awk '{print $$3}')
+	  awk '{print $$3}'))
 	echo -ne "Host mgmt\n\tIdentityFile azure-test\n\tHostname $(MGMT_IP)\n" > ssh-config
 	-cat ssh-config
 	-ssh -F ssh-config opc@mgmt  "while [ ! -f /mnt/shared/finalised/mgmt ] ; do sleep 2; done" ## wait for ansible
