@@ -33,10 +33,11 @@ $(TF_VARS): azure-test.pub
 	  && terraform plan \
 	  && terraform apply -auto-approve
 	# we need to ignore errors between here and the destroy, so make commands start with a minus
-	$(eval MGMT_IP=$(shell cd oci-cluster-terraform ;\
-	  terraform show -no-color |\
-	  grep '^ManagementPublicIP' |\
-	  awk '{print $$3}'))
+	$(eval MGMT_IP=$(shell cd oci-cluster-terraform \
+	  &&  terraform show -no-color \
+	  | grep '^ManagementPublicIP' \
+	  | awk '{print $$3}'))
+	echo "Host mgmt\n\tIdentityFile azure-test\n\tHostname $(MGMT_IP)\n"  
 	echo "Host mgmt\n\tIdentityFile azure-test\n\tHostname $(MGMT_IP)\n" > ssh-config
 	-cat ssh-config
 	-ssh -F ssh-config opc@mgmt  "while [ ! -f /mnt/shared/finalised/mgmt ] ; do sleep 2; done" ## wait for ansible
