@@ -33,8 +33,7 @@ $(TF_VARS): azure-test.pub
 	  && terraform plan \
 	  && terraform apply -auto-approve
 	# we need to ignore errors between here and the destroy, so make commands start with a minus
-	$(eval MGMT_IP=$(shell cd oci-cluster-terraform \
-	  &&  terraform show -no-color \
+	$(eval MGMT_IP=$(shell terraform show -no-color oci-cluster-terraform/terraform.tfstate \
 	  | grep '^ManagementPublicIP' \
 	  | awk '{print $$3}'))
 	echo "Host mgmt\n\tIdentityFile azure-test\n\tHostname $(MGMT_IP)\n"  
