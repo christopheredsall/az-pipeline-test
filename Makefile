@@ -37,7 +37,7 @@ $(TF_VARS): azure-test.pub
 	  terraform show -no-color |\
 	  grep '^ManagementPublicIP' |\
 	  awk '{print $$3}'))
-	echo -ne "Host mgmt\n\tIdentityFile azure-test\n\tHostname $(MGMT_IP)\n" > ssh-config
+	echo "Host mgmt\n\tIdentityFile azure-test\n\tHostname $(MGMT_IP)\n" > ssh-config
 	-cat ssh-config
 	-ssh -F ssh-config opc@mgmt  "while [ ! -f /mnt/shared/finalised/mgmt ] ; do sleep 2; done" ## wait for ansible
 	-ssh -F ssh-config opc@mgmt  "echo -ne 'VM.Standard2.1:\n  1: 1\n  2: 1\n  3: 1\n' > limits.yaml && ./finish"
