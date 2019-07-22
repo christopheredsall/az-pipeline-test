@@ -26,6 +26,7 @@ $(TF_VARS): azure-test.pub
 	sed -i -e "/compartment_ocid/ s/ocid1.compartment.oc1.../$(COMPARTMENT_OCID)/" $(TF_VARS)
 	sed -i -e "/ssh_public_key/ r azure-test.pub" $(TF_VARS)
 	sed -i -e "/FilesystemAD/ s/1/2/" $(TF_VARS)
+	sed -i -e "/ManagementShape/ s/VM.Standard1\.1/VM.Standard2.1/" $(TF_VARS)
 	cat  $(TF_VARS)
 	cd oci-cluster-terraform \
 	  && ../terraform init \
