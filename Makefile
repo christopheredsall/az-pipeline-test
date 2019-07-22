@@ -37,6 +37,8 @@ $(TF_VARS): azure-test.pub
 	-echo -n "Host mgmt\n\tIdentityFile azure-test\n\tStrictHostKeyChecking no\n\tCheckHostIP no\n\tHostname " > ssh-config
 	-terraform show -no-color oci-cluster-terraform/terraform.tfstate | grep 'PublicIP' | awk '{print $$3}' >> ssh-config
 	-cat ssh-config
+	-ls -l
+	-ls -l ~/.ssh
 	-ssh -F ssh-config opc@mgmt  "while [ ! -f /mnt/shared/finalised/mgmt ] ; do sleep 2; done" ## wait for ansible
 	-ssh -F ssh-config opc@mgmt  "echo -ne 'VM.Standard2.1:\n  1: 1\n  2: 1\n  3: 1\n' > limits.yaml && ./finish"
 	-ssh -F ssh-config opc@mgmt  "sudo mkdir -p /mnt/shared/test && sudo chown opc /mnt/shared/test"
