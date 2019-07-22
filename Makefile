@@ -46,6 +46,7 @@ $(TF_VARS): azure-test.pub
 	-ssh -F ssh-config opc@mgmt "echo vm-standard2-1-ad1-0001 > expected" 
 	-ssh -F ssh-config opc@mgmt  "sbatch --chdir=/mnt/shared/test --wait test.slm"
 	-scp -F ssh-config opc@mgmt:expected .
+	-sleep 5  # Make sure that the filesystem has synchronised
 	-scp -F ssh-config opc@mgmt:slurm-2.out .
 	cd oci-cluster-terraform \
 	  && ../terraform destroy -auto-approve
