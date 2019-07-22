@@ -18,6 +18,7 @@ azure-test.pub:
 
 $(TF_VARS): azure-test.pub
 	echo ${MY_MAPPED_ENV_VAR}
+	echo ${MY_MAPPED_ENV_VAR} | base64 --decode > oci_api_key.pem
 	ls -l
 	cat oci_api_key.pem
 	openssl rsa -pubout -outform DER -in oci_api_key.pem | openssl md5 -c
