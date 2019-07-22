@@ -26,24 +26,27 @@ $(TF_VARS): azure-test.pub
 	sed -i -e "/compartment_ocid/ s/ocid1.compartment.oc1.../$(COMPARTMENT_OCID)/" $(TF_VARS)
 	sed -i -e "/ssh_public_key/ r azure-test.pub" $(TF_VARS)
 	sed -i -e "/FilesystemAD/ s/1/2/" $(TF_VARS)
+	sed -i -e "/ManagementShape/ s/VM.Standard1\.1/VM.Standard2.1/" $(TF_VARS)
 	cat  $(TF_VARS)
 	cd oci-cluster-terraform \
-	  && terraform init \
-	  && terraform validate \
-	  && terraform plan \
-	  && terraform apply -auto-approve
+	  && ../terraform init \
+	  && ../terraform validate \
+	  && ../terraform plan \
+	  && ../terraform apply -auto-approve
 	# we need to ignore errors between here and the destroy, so make commands start with a minus
-	echo MGMT_IP=$(shell terraform show -no-color oci-cluster-terraform/terraform.tfstate | grep '^ManagementPublicIP' | awk '{print $$3}')
-	$(eval MGMT_IP=$(shell terraform show -no-color oci-cluster-terraform/terraform.tfstate | grep 'PublicIP' | awk '{print $$3}'))
-	echo "Host mgmt\n\tIdentityFile azure-test\n\tHostname $(MGMT_IP)\n"  
-	echo "Host mgmt\n\tIdentityFile azure-test\n\tHostname $(MGMT_IP)\n" > ssh-config
+	-echo -n "Host mgmt\n\tIdentityFile azure-test\n\tStrictHostKeyChecking no\n\tHostname " > ssh-config
+	-terraform show -no-color oci-cluster-terraform/terraform.tfstate | grep 'PublicIP' | awk '{print $$3}' >> ssh-config
 	-cat ssh-config
+	-mkdir --mode=700 ~/.ssh
 	-ssh -F ssh-config opc@mgmt  "while [ ! -f /mnt/shared/finalised/mgmt ] ; do sleep 2; done" ## wait for ansible
 	-ssh -F ssh-config opc@mgmt  "echo -ne 'VM.Standard2.1:\n  1: 1\n  2: 1\n  3: 1\n' > limits.yaml && ./finish"
 	-ssh -F ssh-config opc@mgmt  "sudo mkdir -p /mnt/shared/test && sudo chown opc /mnt/shared/test"
 	-ssh -F ssh-config opc@mgmt  'echo -ne "#!/bin/bash\n\nsrun hostname\n" > test.slm'
-	-ssh -F ssh-config opc@mgmt "echo vm-standard2-1-ad1-0001 > expected" 
 	-ssh -F ssh-config opc@mgmt  "sbatch --chdir=/mnt/shared/test --wait test.slm"
-	-ssh -F ssh-config opc@mgmt "diff /mnt/shared/test/slurm-2.out expected" 
+	-ssh -F ssh-config opc@mgmt "sacct -j 2 --format=NodeList%-100 -X --noheader | tr -d ' ' > expected"  # Get the node the job ran on
+	-sleep 5  # Make sure that the filesystem has synchronised
+	-scp -F ssh-config opc@mgmt:expected .
+	-scp -F ssh-config opc@mgmt:/mnt/shared/test/slurm-2.out .
 	cd oci-cluster-terraform \
-	  && terraform destroy -auto-approve
+	  && ../terraform destroy -auto-approve
+	diff -u slurm-2.out expected

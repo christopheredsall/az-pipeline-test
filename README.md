@@ -15,13 +15,13 @@ Your key file needs to be `base64` encoded in to a single long string, e.g.
 $ cat /home/username/.oci/oci_test_key.pem | base64 --wrap=0
 ```
 
-Add this as the variable `private_key` and mark the variable as a secret (click the :lock: icon).
+Add this as the variable `oci_api_key.pem` and mark the variable as a secret (click the :lock: icon).
 
 You will also need to set
 
 ```
-tenancy_ocid
-user_ocid
-fingerprint
-compartment_ocid
+TENANCY_OCID
+USER_OCID
+FINGERPRINT
+COMPARTMENT_OCID
 ```
