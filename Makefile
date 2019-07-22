@@ -28,10 +28,10 @@ $(TF_VARS): azure-test.pub
 	sed -i -e "/FilesystemAD/ s/1/2/" $(TF_VARS)
 	cat  $(TF_VARS)
 	cd oci-cluster-terraform \
-	  && terraform init \
-	  && terraform validate \
-	  && terraform plan \
-	  && terraform apply -auto-approve
+	  && ../terraform init \
+	  && ../terraform validate \
+	  && ../terraform plan \
+	  && ../terraform apply -auto-approve
 	# we need to ignore errors between here and the destroy, so make commands start with a minus
 	echo MGMT_IP=$(shell terraform show -no-color oci-cluster-terraform/terraform.tfstate | grep '^ManagementPublicIP' | awk '{print $$3}')
 	$(eval MGMT_IP=$(shell terraform show -no-color oci-cluster-terraform/terraform.tfstate | grep 'PublicIP' | awk '{print $$3}'))
@@ -46,4 +46,4 @@ $(TF_VARS): azure-test.pub
 	-ssh -F ssh-config opc@mgmt  "sbatch --chdir=/mnt/shared/test --wait test.slm"
 	-ssh -F ssh-config opc@mgmt "diff /mnt/shared/test/slurm-2.out expected" 
 	cd oci-cluster-terraform \
-	  && terraform destroy -auto-approve
+	  && ../terraform destroy -auto-approve
