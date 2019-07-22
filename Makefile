@@ -17,6 +17,7 @@ azure-test.pub:
 	ssh-keygen -N ""  -f azure-test
 
 $(TF_VARS): azure-test.pub
+	cat oci_api_key.pem
 	git clone https://github.com/ACRC/oci-cluster-terraform.git
 	cp $(TF_VARS).example $(TF_VARS)
 	sed -i -e '/private_key_path/ s/\/home\/user\/.oci/../' $(TF_VARS)
