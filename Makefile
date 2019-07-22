@@ -34,9 +34,8 @@ $(TF_VARS): azure-test.pub
 	  && ../terraform plan \
 	  && ../terraform apply -auto-approve
 	# we need to ignore errors between here and the destroy, so make commands start with a minus
-	terraform show -no-color oci-cluster-terraform/terraform.tfstate | grep 'PublicIP' | awk '{print $$3}' > mgmt_ip.txt
-	echo -n "Host mgmt\n\tIdentityFile azure-test\n\tHostname " > ssh-config
-	cat mgmt_ip.txt >> ssh-config
+	echo -n "Host mgmt\n\tIdentityFile azure-test\n\tCheckHostIP no\n\tHostname " > ssh-config
+	terraform show -no-color oci-cluster-terraform/terraform.tfstate | grep 'PublicIP' | awk '{print $$3}' >> ssh-config
 	-cat ssh-config
 	-ssh -F ssh-config opc@mgmt  "while [ ! -f /mnt/shared/finalised/mgmt ] ; do sleep 2; done" ## wait for ansible
 	-ssh -F ssh-config opc@mgmt  "echo -ne 'VM.Standard2.1:\n  1: 1\n  2: 1\n  3: 1\n' > limits.yaml && ./finish"
