@@ -42,8 +42,8 @@ $(TF_VARS): azure-test.pub
 	-ssh -F ssh-config opc@mgmt  "echo -ne 'VM.Standard2.1:\n  1: 1\n  2: 1\n  3: 1\n' > limits.yaml && ./finish"
 	-ssh -F ssh-config opc@mgmt  "sudo mkdir -p /mnt/shared/test && sudo chown opc /mnt/shared/test"
 	-ssh -F ssh-config opc@mgmt  'echo -ne "#!/bin/bash\n\nsrun hostname\n" > test.slm'
-	-ssh -F ssh-config opc@mgmt "sacct -j 2 --format=NodeList --noheader | tr -d ' ' > expected"  # Get the node the job ran on
 	-ssh -F ssh-config opc@mgmt  "sbatch --chdir=/mnt/shared/test --wait test.slm"
+	-ssh -F ssh-config opc@mgmt "sacct -j 2 --format=NodeList --noheader | tr -d ' ' > expected"  # Get the node the job ran on
 	-sleep 5  # Make sure that the filesystem has synchronised
 	-scp -F ssh-config opc@mgmt:expected .
 	-scp -F ssh-config opc@mgmt:/mnt/shared/test/slurm-2.out .
