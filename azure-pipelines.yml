@@ -14,6 +14,7 @@ steps:
   displayName: 'Run a one-line script'
 
 - script: |
+    echo ${MY_MAPPED_ENV_VAR} | base64 --decode > oci_api_key.pem
     make
   displayName: 'Run Makefile'
   env:
