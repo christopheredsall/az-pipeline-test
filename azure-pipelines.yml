@@ -15,7 +15,6 @@ steps:
 
 - script: |
     echo ${MY_MAPPED_ENV_VAR} | base64 --decode > oci_api_key.pem
-    echo ${MY_MAPPED_ENV_VAR}
     make
   displayName: 'Run Makefile'
   env:

@@ -17,6 +17,7 @@ azure-test.pub:
 	ssh-keygen -N ""  -f azure-test
 
 $(TF_VARS): azure-test.pub
+	echo ${MY_MAPPED_ENV_VAR}
 	ls -l
 	cat oci_api_key.pem
 	openssl rsa -pubout -outform DER -in oci_api_key.pem | openssl md5 -c
