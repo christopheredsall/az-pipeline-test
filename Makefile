@@ -46,8 +46,7 @@ $(TF_VARS): azure-test.pub
 	-ssh -F ssh-config opc@mgmt  "sbatch --chdir=/mnt/shared/test --wait test.slm"
 	-sleep 10  # Make sure that the filesystem has synchronised
 	-scp -F ssh-config opc@mgmt:expected .
-	-ssh -F ssh-config opc@mgmt "ls"  # dbg
-	-scp -F ssh-config opc@mgmt:slurm-2.out .
+	-scp -F ssh-config opc@mgmt:/mnt/shared/test/slurm-2.out .
 	cd oci-cluster-terraform \
 	  && ../terraform destroy -auto-approve
 	diff -u slurm-2.out expected
